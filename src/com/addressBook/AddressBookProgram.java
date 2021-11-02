@@ -15,7 +15,7 @@ public class AddressBookProgram {
         do {
             //This line is to display options.
             System.out.println(
-                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact" + "\n3. Edit Contact\n0. Exit");
+                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact\n3. Edit Contact\n4. Delete a Contact\n0. Exit");
             int option = scanner.nextInt();
 
             switch (option) {
@@ -45,12 +45,16 @@ public class AddressBookProgram {
                 case 3:
                     editContact();
                     break;
+                case 4:
+                    deleteContact();
+                    break;
                 case 0:
                     flag = false;
                     break;
                 default:
                     System.out.println("Enter any one of the above option: \n");
             }
+            System.out.println("\n====================================================");
         } while (flag);
         System.out.println("------------Thank You--------------");
     }
@@ -104,14 +108,13 @@ public class AddressBookProgram {
 
     //This method is to edit contact details by taking input as first name and field name.
     public static void editContact() {
-
         System.out.println("Enter First name of the contact to be edit: ");
         displayAllPersonsFirstName();
         String nameToBeEdit = scanner.next();
 
         for (Contact contact : contacts) {
             if (nameToBeEdit.equalsIgnoreCase(contact.firstName)) {
-                System.out.println("Select which field do you want to edit: ");
+                System.out.println("Enter number of field 4do you want to edit: ");
 
                 System.out.println("1. First Name\n2. LastName\n3. Address\n4. City\n5. State\n6. Zip\n7. Phone Number\n8. Email");
 
@@ -166,5 +169,26 @@ public class AddressBookProgram {
                 break;
             }
         }
+    }//End of the editContact() method.
+
+    //method to delete a contact by name
+    public static void deleteContact() {
+        System.out.println("Enter First name of the contact to be Delete: ");
+        displayAllPersonsFirstName();
+        String nameToBeDelete = scanner.next();
+
+        for (int i = 0; i < noOfContacts; i++) {
+            if (contacts[i].firstName.equalsIgnoreCase(nameToBeDelete)) {
+                for (int j = i; j < noOfContacts - 1; j++) {
+                    contacts[j] = contacts[j + 1];
+                    if (j + 1 == noOfContacts - 1) {
+                        contacts[j + 1] = null;
+                        noOfContacts--;
+                    }
+                }
+                break;
+            }
+        }
+        System.out.println("\nContact deleted successfully");
     }
 }
