@@ -1,10 +1,9 @@
 package com.addressBook;
-import java.util.Scanner;
+import java.util.*;
 
 public class AddressBookProgram {
     static Scanner scanner = new Scanner(System.in);
-    static Contact[] contacts;
-    static int noOfContacts;
+    static LinkedList<Contact> contactsList = new LinkedList<>();
 
     public static void main(String[] args) {
         //This variable is used to exit the do while loop when user enters Exit as option.
@@ -20,24 +19,9 @@ public class AddressBookProgram {
 
             switch (option) {
                 case 1:
-                    //This if conditions checks weather Contacts arrys is empty or not,
-                    //If array is empty it creates an Contact array.
-                    if (contacts == null) {
-                        System.out.println("Enter how many Contacts do you want add: ");
-                        noOfContacts = scanner.nextInt();
-                        contacts = new Contact[noOfContacts];
-                        noOfContacts = 0;
-                    }
-                    //It Checks the contacts added in array were less than array size,
-                    // and have space in array, if its true then a new contact will be added.
-                    if (noOfContacts < contacts.length) {
-                        System.out.println("\nEnter person-" + (noOfContacts + 1) + " details: \n");
-                        Contact contact = addContact();
-                        contacts[noOfContacts] = contact;
-                        noOfContacts++;
-                    } else {
-                        System.out.println("\nAddress book is full can not be added new Contact");
-                    }
+                    System.out.println("\nEnter person-" + (contactsList.size()+1) + " details: \n");
+                    Contact contact = addContact();
+                    contactsList.add(contact);
                     break;
                 case 2:
                     displayContactByName();
@@ -62,8 +46,8 @@ public class AddressBookProgram {
     //This method is to print First name in every Contact object which are in array.
     public static void displayAllPersonsFirstName() {
         System.out.println("\nAll Contacts: ");
-        for (int i = 0; i < noOfContacts; i++) {
-            System.out.println((i + 1) + ". " + contacts[i].firstName);
+        for (int i = 0; i < contactsList.size(); i++) {
+            System.out.println((i + 1) + ". " + contactsList.get(i).firstName);
         }
     }
 
@@ -72,7 +56,7 @@ public class AddressBookProgram {
         System.out.println("Enter first name of the person to display details: ");
         displayAllPersonsFirstName();
         String nameTodispContact = scanner.next();
-        for (Contact contact : contacts) {
+        for (Contact contact : contactsList) {
             if (nameTodispContact.equalsIgnoreCase(contact.firstName)) {
                 System.out.println(contact);
                 break;
@@ -112,9 +96,9 @@ public class AddressBookProgram {
         displayAllPersonsFirstName();
         String nameToBeEdit = scanner.next();
 
-        for (Contact contact : contacts) {
+        for (Contact contact : contactsList) {
             if (nameToBeEdit.equalsIgnoreCase(contact.firstName)) {
-                System.out.println("Enter number of field 4do you want to edit: ");
+                System.out.println("Enter number of field do you want to edit: ");
 
                 System.out.println("1. First Name\n2. LastName\n3. Address\n4. City\n5. State\n6. Zip\n7. Phone Number\n8. Email");
 
@@ -177,15 +161,9 @@ public class AddressBookProgram {
         displayAllPersonsFirstName();
         String nameToBeDelete = scanner.next();
 
-        for (int i = 0; i < noOfContacts; i++) {
-            if (contacts[i].firstName.equalsIgnoreCase(nameToBeDelete)) {
-                for (int j = i; j < noOfContacts - 1; j++) {
-                    contacts[j] = contacts[j + 1];
-                    if (j + 1 == noOfContacts - 1) {
-                        contacts[j + 1] = null;
-                        noOfContacts--;
-                    }
-                }
+        for (Contact contact : contactsList) {
+            if (contact.firstName.equalsIgnoreCase(nameToBeDelete)) {
+                contactsList.remove(contact);
                 break;
             }
         }
