@@ -3,23 +3,97 @@ import java.util.*;
 
 public class AddressBookProgram {
     static Scanner scanner = new Scanner(System.in);
-    static LinkedList<Contact> contactsList = new LinkedList<>();
+    static LinkedList<Contact> contactsList;
+    static String addressBookName;
+    static Map<String, LinkedList> addressBookMap = new HashMap<>();
+
 
     public static void main(String[] args) {
         //This variable is used to exit the do while loop when user enters Exit as option.
-        boolean flag = true;
+
         System.out.println("Welcome to Address Book Program");
 
-        //do while is used to continue the Address book system until user enters Exit.
+        boolean flag = true;
+
         do {
-            //This line is to display options.
-            System.out.println(
-                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact\n3. Edit Contact\n4. Delete a Contact\n0. Exit");
+            System.out.println("\nEnter a Option: \n1. Create AddressBook\n2. Display all Address Books\n3. Enter a Address Book\n0. Exit Address Book Program");
             int option = scanner.nextInt();
 
             switch (option) {
                 case 1:
-                    System.out.println("\nEnter person-" + (contactsList.size()+1) + " details: \n");
+                    createAddressBook();
+                    break;
+                case 2:
+                    displayAddressBookNames();
+                    break;
+                case 3:
+                    enterAddressBook();
+                    break;
+                case 0:
+                    flag = false;
+                    break;
+                default:
+                    System.out.println("\nEnter any one of the above option: ");
+
+            }
+            System.out.println("\n====================================================");
+        } while (flag);
+
+        System.out.println("\n-------Thamk You-----");
+    }
+
+    public static void enterAddressBook() {
+        System.out.println("Enter name of Adress book do you want to enter: ");
+        displayAddressBookNames();
+        String addressBookNameToEnter = scanner.next();
+        for (Map.Entry<String, LinkedList> entry : addressBookMap.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(addressBookNameToEnter)) {
+                contactsList = entry.getValue();
+                addressBookName = entry.getKey();
+                break;
+            }
+        }
+        System.out.println("Entered in to " + addressBookName + " Address Book: ");
+        contactOperations();
+    }
+
+    public static void createAddressBook() {
+        System.out.println("\nEnter a name to create new Address Book: ");
+        String addressBookNameToCreate = scanner.next().toLowerCase();//key
+
+        if (addressBookMap.containsKey(addressBookNameToCreate)) {
+            System.out.println("\nAddress Book " + addressBookNameToCreate + " is already available.");
+        } else {
+            LinkedList<Contact> list = new LinkedList<>();//Value
+            addressBookMap.put(addressBookNameToCreate, list);
+            System.out.println("\nAddress Book Creted Successfully");
+            displayAddressBookNames();
+        }
+    }
+
+
+    public static void displayAddressBookNames() {
+        System.out.println("\n------Address Books------");
+        int i = 1;
+        for (String addressBookName : addressBookMap.keySet()) {
+            System.out.println(i + "." + addressBookName);
+            i++;
+        }
+    }
+
+    public static void contactOperations() {
+        boolean flag = true;
+        //do while is used to continue the Address book system until user enters Exit.
+        do {
+            System.out.println("\n---------" + addressBookName + " Address Book--------");
+            //This line is to display options.
+            System.out.println(
+                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact\n3. Edit Contact\n4. Delete a Contact\n0. Exit the Address Book");
+            int option = scanner.nextInt();
+
+            switch (option) {
+                case 1:
+                    System.out.println("\nEnter person-" + (contactsList.size() + 1) + " details: \n");
                     Contact contact = addContact();
                     contactsList.add(contact);
                     break;
@@ -40,7 +114,7 @@ public class AddressBookProgram {
             }
             System.out.println("\n====================================================");
         } while (flag);
-        System.out.println("------------Thank You--------------");
+        System.out.println("-------" + addressBookName + " Adress Book Exited-------");
     }
 
     //This method is to print First name in every Contact object which are in array.
