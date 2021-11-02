@@ -2,8 +2,6 @@ package com.addressBook;
 import java.util.Scanner;
 
 public class AddressBookProgram {
-
-
     static Scanner scanner = new Scanner(System.in);
     static Contact[] contacts;
     static int noOfContacts;
@@ -17,7 +15,7 @@ public class AddressBookProgram {
         do {
             //This line is to display options.
             System.out.println(
-                    "\nEnter a Option: \n1. Add Contact\n2. Display All Contacts" + "\n3. Exit");
+                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact" + "\n3. Edit Contact\n0. Exit");
             int option = scanner.nextInt();
 
             switch (option) {
@@ -42,9 +40,12 @@ public class AddressBookProgram {
                     }
                     break;
                 case 2:
-                    displayPersonNames();
+                    displayContactByName();
                     break;
                 case 3:
+                    editContact();
+                    break;
+                case 0:
                     flag = false;
                     break;
                 default:
@@ -54,11 +55,24 @@ public class AddressBookProgram {
         System.out.println("------------Thank You--------------");
     }
 
-    //This method is to print First name in every contact object which are in array.
-    public static void displayPersonNames() {
+    //This method is to print First name in every Contact object which are in array.
+    public static void displayAllPersonsFirstName() {
         System.out.println("\nAll Contacts: ");
         for (int i = 0; i < noOfContacts; i++) {
             System.out.println((i + 1) + ". " + contacts[i].firstName);
+        }
+    }
+
+    //This method displays the details of a person by taking input as first name.
+    public static void displayContactByName() {
+        System.out.println("Enter first name of the person to display details: ");
+        displayAllPersonsFirstName();
+        String nameTodispContact = scanner.next();
+        for (Contact contact : contacts) {
+            if (nameTodispContact.equalsIgnoreCase(contact.firstName)) {
+                System.out.println(contact);
+                break;
+            }
         }
     }
 
@@ -86,5 +100,71 @@ public class AddressBookProgram {
         System.out.println(contact);
         System.out.println("\nContact Added to Address Book successfully.");
         return contact;
+    }
+
+    //This method is to edit contact details by taking input as first name and field name.
+    public static void editContact() {
+
+        System.out.println("Enter First name of the contact to be edit: ");
+        displayAllPersonsFirstName();
+        String nameToBeEdit = scanner.next();
+
+        for (Contact contact : contacts) {
+            if (nameToBeEdit.equalsIgnoreCase(contact.firstName)) {
+                System.out.println("Select which field do you want to edit: ");
+
+                System.out.println("1. First Name\n2. LastName\n3. Address\n4. City\n5. State\n6. Zip\n7. Phone Number\n8. Email");
+
+                int select = scanner.nextInt();
+
+                switch (select) {
+                    case 1:
+                        System.out.println("Enter First Name: ");
+                        String firstName = scanner.next();
+                        contact.firstName = firstName;
+                        break;
+                    case 2:
+                        System.out.println("Enter Last Name: ");
+                        String lastName = scanner.next();
+                        contact.lastName = lastName;
+                        break;
+                    case 3:
+                        System.out.println("Enter Address: ");
+                        String address = scanner.next();
+                        contact.address = address;
+                        break;
+                    case 4:
+                        System.out.println("Enter City: ");
+                        String city = scanner.next();
+                        contact.city = city;
+                        break;
+                    case 5:
+                        System.out.println("Enter State: ");
+                        String state = scanner.next();
+                        contact.state = state;
+                        break;
+                    case 6:
+                        System.out.println("Enter Zip: ");
+                        String zip = scanner.next();
+                        contact.zip = zip;
+                        break;
+                    case 7:
+                        System.out.println("Enter Phone Number: ");
+                        String phoneNumber = scanner.next();
+                        contact.phoneNumber = phoneNumber;
+                        break;
+                    case 8:
+                        System.out.println("Enter Email: ");
+                        String email = scanner.next();
+                        contact.email = email;
+                        break;
+                    default:
+                        System.out.println("Selected number is invalid");
+                }
+                System.out.println("\n" + contact);
+                System.out.println("\nContact Edited Successfully");
+                break;
+            }
+        }
     }
 }
