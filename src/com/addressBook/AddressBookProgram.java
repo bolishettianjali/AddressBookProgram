@@ -1,5 +1,7 @@
 package com.addressBook;
+
 import java.util.*;
+import java.util.stream.Stream;
 
 public class AddressBookProgram {
     static Scanner scanner = new Scanner(System.in);
@@ -39,7 +41,7 @@ public class AddressBookProgram {
             System.out.println("\n====================================================");
         } while (flag);
 
-        System.out.println("\n-------Thamk You-----");
+        System.out.println("\n-------Thank You-----");
     }
 
     public static void enterAddressBook() {
@@ -62,7 +64,7 @@ public class AddressBookProgram {
         String addressBookNameToCreate = scanner.next().toLowerCase();//key
 
         if (addressBookMap.containsKey(addressBookNameToCreate)) {
-            System.out.println("\nAddress Book " + addressBookNameToCreate + " is already available.");
+            System.out.println("\nAddress Book " + addressBookNameToCreate + " is already Exists.");
         } else {
             LinkedList<Contact> list = new LinkedList<>();//Value
             addressBookMap.put(addressBookNameToCreate, list);
@@ -70,7 +72,6 @@ public class AddressBookProgram {
             displayAddressBookNames();
         }
     }
-
 
     public static void displayAddressBookNames() {
         System.out.println("\n------Address Books------");
@@ -93,9 +94,7 @@ public class AddressBookProgram {
 
             switch (option) {
                 case 1:
-                    System.out.println("\nEnter person-" + (contactsList.size() + 1) + " details: \n");
-                    Contact contact = addContact();
-                    contactsList.add(contact);
+                    addContact();
                     break;
                 case 2:
                     displayContactByName();
@@ -140,7 +139,9 @@ public class AddressBookProgram {
 
     /*This method is to take person details from console and create contact object,
     and returns Contact object.*/
-    public static Contact addContact() {
+    public static void addContact() {
+        System.out.println("\nEnter person-" + (contactsList.size() + 1) + " details: \n");
+
         System.out.println("Enter First Name:");
         String firstName = scanner.next();
         System.out.println("Enter Last Name:");
@@ -159,9 +160,14 @@ public class AddressBookProgram {
         String email = scanner.next();
 
         Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
-        System.out.println(contact);
-        System.out.println("\nContact Added to Address Book successfully.");
-        return contact;
+        if (checkContactIsExistsOrNot(contact)) {
+            System.out.println("Contact with name '" + firstName + "' is already exists!");
+        }
+        else {
+            contactsList.add(contact);
+            System.out.println(contact);
+            System.out.println("\nContact Added to '" + addressBookName + "' Address Book successfully.");
+        }
     }
 
     //This method is to edit contact details by taking input as first name and field name.
@@ -242,5 +248,13 @@ public class AddressBookProgram {
             }
         }
         System.out.println("\nContact deleted successfully");
+    }
+
+    public static boolean checkContactIsExistsOrNot(Contact contactToBeCheck) {
+
+      boolean flag = contactsList.stream().anyMatch(contact -> contact.equals(contactToBeCheck));
+
+      return flag;
+
     }
 }
