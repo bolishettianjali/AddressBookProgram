@@ -17,10 +17,29 @@ public class Contact {
         this.email = email;
     }
 
+    @Override
     public String toString() {
-        return "First Name: " + firstName +"\nLast Name: " + lastName + "\nAddress: "
+        return "First Name: " + firstName + "\nLast Name: " + lastName + "\nAddress: "
                 + address + "\nCity: " + city + "\nState: " + state + "\nZip: " + zip
                 + "\nPhone Number: " + phoneNumber + "\nEmail: " + email;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        // If the object is compared with itself then return true
+        if (obj == this) {
+            return true;
+        }
+        // Check if obj is an instance of Contact or not
+        if (!(obj instanceof Contact)) {
+            return false;
+        }
+        // typecast obj to Contact so that we can compare data members
+        Contact contact = (Contact) obj;
+
+        // Compare the data members and return accordingly
+        return firstName.equalsIgnoreCase(contact.firstName);
     }
 }
 
