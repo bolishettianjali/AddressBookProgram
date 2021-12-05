@@ -8,6 +8,8 @@ public class AddressBookProgram {
     static LinkedList<Contact> contactsList;
     static String addressBookName;
     static Map<String, LinkedList> addressBookMap = new HashMap<>();
+    static Map<String, String> cityAndPersonsMap = new HashMap<>();
+    static Map<String, String> stateAndPersonsMap = new HashMap<>();
 
 
     public static void main(String[] args) {
@@ -19,7 +21,8 @@ public class AddressBookProgram {
 
         do {
             System.out.println("\nEnter a Option: \n1. Create AddressBook\n2. Display all Address Books\n3. Enter a Address Book" +
-                    "\n4. Search a Person in a city across all Address Books\n0. Exit Address Book Program");
+                    "\n4. Search a Person in a city across all Address Books\n5. View persons in City or State" +
+                    "\n0. Exit Address Book Program");
             String option = scanner.next();
 
             switch (option) {
@@ -34,6 +37,9 @@ public class AddressBookProgram {
                     break;
                 case "4":
                     searchPersonInCityAcrossAllAddressBooks();
+                    break;
+                case "5":
+                    displayPersonsByCityOrState();
                     break;
                 case "0":
                     flag = false;
@@ -83,6 +89,38 @@ public class AddressBookProgram {
         for (String addressBookName : addressBookMap.keySet()) {
             System.out.println(i + "." + addressBookName);
             i++;
+        }
+    }
+
+    /**
+     * Method is to view persons in City or State
+     */
+    public static void displayPersonsByCityOrState() {
+
+        System.out.println("Enter a option to show persons in : \n1-city: \n2-state: ");
+        String option = scanner.next();
+        if (option.equals("1")) {
+            System.out.println("Enter City Name: ");
+            String city = scanner.next();
+
+            cityAndPersonsMap.forEach((key, value) -> {
+                if (value.equalsIgnoreCase(city)) {
+                    System.out.println("Person Name: " + key + ", City: " + value);
+                }
+            });
+        }
+        else if (option.equals("2")) {
+            System.out.println("Enter State Name: ");
+            String state = scanner.next();
+
+            stateAndPersonsMap.forEach((key, value) -> {
+                if (value.equalsIgnoreCase(state)) {
+                    System.out.println("Person Name: " + key + ", State: " + value);
+                }
+            });
+        }
+        else {
+            System.out.println("Entered invalid option");
         }
     }
 
@@ -173,6 +211,8 @@ public class AddressBookProgram {
             contactsList.add(contact);
             System.out.println(contact);
             System.out.println("\nContact Added to '" + addressBookName + "' Address Book successfully.");
+            cityAndPersonsMap.put(firstName, city);
+            stateAndPersonsMap.put(firstName, state);
         }
     }
 
