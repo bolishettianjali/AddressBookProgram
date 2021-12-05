@@ -18,20 +18,24 @@ public class AddressBookProgram {
         boolean flag = true;
 
         do {
-            System.out.println("\nEnter a Option: \n1. Create AddressBook\n2. Display all Address Books\n3. Enter a Address Book\n0. Exit Address Book Program");
-            int option = scanner.nextInt();
+            System.out.println("\nEnter a Option: \n1. Create AddressBook\n2. Display all Address Books\n3. Enter a Address Book" +
+                    "\n4. Search a Person in a city across all Address Books\n0. Exit Address Book Program");
+            String option = scanner.next();
 
             switch (option) {
-                case 1:
+                case "1":
                     createAddressBook();
                     break;
-                case 2:
+                case "2":
                     displayAddressBookNames();
                     break;
-                case 3:
+                case "3":
                     enterAddressBook();
                     break;
-                case 0:
+                case "4":
+                    searchPersonInCityAcrossAllAddressBooks();
+                    break;
+                case "0":
                     flag = false;
                     break;
                 default:
@@ -55,7 +59,7 @@ public class AddressBookProgram {
                 break;
             }
         }
-        System.out.println("Entered in to " + addressBookName + " Address Book: ");
+        System.out.println("\nEntered in to " + addressBookName + " Address Book: ");
         contactOperations();
     }
 
@@ -89,23 +93,26 @@ public class AddressBookProgram {
             System.out.println("\n---------" + addressBookName + " Address Book--------");
             //This line is to display options.
             System.out.println(
-                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact\n3. Edit Contact\n4. Delete a Contact\n0. Exit the Address Book");
-            int option = scanner.nextInt();
+                    "\nEnter a Option: \n1. Add Contact\n2. Display a Contact by name\n3. Edit Contact" +
+                            "\n4. Delete a Contact\n5. Display all Contact Names \n0. Exit " + addressBookName + " Address Book");
+            String option = scanner.next();
 
             switch (option) {
-                case 1:
+                case "1":
                     addContact();
                     break;
-                case 2:
+                case "2":
                     displayContactByName();
                     break;
-                case 3:
+                case "3":
                     editContact();
                     break;
-                case 4:
+                case "4":
                     deleteContact();
                     break;
-                case 0:
+                case "5":
+                    displayAllContactPersonNames();
+                case "0":
                     flag = false;
                     break;
                 default:
@@ -162,8 +169,7 @@ public class AddressBookProgram {
         Contact contact = new Contact(firstName, lastName, address, city, state, zip, phoneNumber, email);
         if (checkContactIsExistsOrNot(contact)) {
             System.out.println("Contact with name '" + firstName + "' is already exists!");
-        }
-        else {
+        } else {
             contactsList.add(contact);
             System.out.println(contact);
             System.out.println("\nContact Added to '" + addressBookName + "' Address Book successfully.");
@@ -250,11 +256,45 @@ public class AddressBookProgram {
         System.out.println("\nContact deleted successfully");
     }
 
+    /**
+     * This method is used to print all contacts first name
+     */
+    public static void displayAllContactPersonNames() {
+        int i = 1;
+        for (Contact contact : contactsList) {
+            System.out.println(i++ + ". " + contact.firstName);
+        }
+    }
+
+    /**
+     * This method is to check weather a contact is exists or not.
+     *
+     * @param contactToBeCheck
+     * @return
+     */
     public static boolean checkContactIsExistsOrNot(Contact contactToBeCheck) {
+        boolean flag = contactsList.stream().anyMatch(contact -> contact.equals(contactToBeCheck));
+        return flag;
+    }
 
-      boolean flag = contactsList.stream().anyMatch(contact -> contact.equals(contactToBeCheck));
+    /**
+     * This method is used to search person in city across all AddressBooks
+     */
+    public static void searchPersonInCityAcrossAllAddressBooks() {
+        System.out.println("\nEnter First Name: ");
+        String firstName = scanner.next();
+        System.out.println("Enter City Name: ");
+        String city = scanner.next();
 
-      return flag;
-
+        for (Map.Entry<String, LinkedList> entry : addressBookMap.entrySet()) {
+            LinkedList<Contact> contactList = entry.getValue();
+            for (Contact contact : contactList) {
+                if (contact.firstName.equalsIgnoreCase(firstName) && contact.city.equalsIgnoreCase(city)) {
+                    System.out.println("\nAddress Book Name: " + entry.getKey());
+                    System.out.println("City Name: " + contact.city);
+                    System.out.println("Person Name: " + contact.firstName);
+                }
+            }
+        }
     }
 }

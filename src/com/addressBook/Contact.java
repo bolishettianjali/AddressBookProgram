@@ -24,6 +24,11 @@ public class Contact {
                 + "\nPhone Number: " + phoneNumber + "\nEmail: " + email;
     }
 
+    /**
+     * This is overridden equals method to compare the Contact object.
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
 
