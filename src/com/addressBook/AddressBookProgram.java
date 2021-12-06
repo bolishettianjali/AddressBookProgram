@@ -1,7 +1,6 @@
 package com.addressBook;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class AddressBookProgram {
     static Scanner scanner = new Scanner(System.in);
@@ -22,7 +21,7 @@ public class AddressBookProgram {
         do {
             System.out.println("\nEnter a Option: \n1. Create AddressBook\n2. Display all Address Books\n3. Enter a Address Book" +
                     "\n4. Search a Person in a city across all Address Books\n5. View persons in City or State" +
-                    "\n0. Exit Address Book Program");
+                    "\n6. Count no.of persons in city or state\n0. Exit Address Book Program");
             String option = scanner.next();
 
             switch (option) {
@@ -40,6 +39,9 @@ public class AddressBookProgram {
                     break;
                 case "5":
                     displayPersonsByCityOrState();
+                    break;
+                case "6":
+                    getNoOfPersonsCountInCityOrState();
                     break;
                 case "0":
                     flag = false;
@@ -97,7 +99,7 @@ public class AddressBookProgram {
      */
     public static void displayPersonsByCityOrState() {
 
-        System.out.println("Enter a option to show persons in : \n1-city: \n2-state: ");
+        System.out.println("Enter a option to show persons in : \n1 - city: \n2 - state: ");
         String option = scanner.next();
         if (option.equals("1")) {
             System.out.println("Enter City Name: ");
@@ -108,8 +110,7 @@ public class AddressBookProgram {
                     System.out.println("Person Name: " + key + ", City: " + value);
                 }
             });
-        }
-        else if (option.equals("2")) {
+        } else if (option.equals("2")) {
             System.out.println("Enter State Name: ");
             String state = scanner.next();
 
@@ -118,9 +119,28 @@ public class AddressBookProgram {
                     System.out.println("Person Name: " + key + ", State: " + value);
                 }
             });
-        }
-        else {
+        } else {
             System.out.println("Entered invalid option");
+        }
+    }
+
+    /**
+     * Method is used to count toatal no of persons in a city or state.
+     */
+    public static void getNoOfPersonsCountInCityOrState() {
+        System.out.println("Enter a option to show persons in : \n1 - city: \n2 - state: ");
+        String option = scanner.next();
+        if (option.equals("1")) {
+            System.out.println("Enter City Name: ");
+            String city = scanner.next();
+            long totalPersonsInCity = cityAndPersonsMap.entrySet().stream().filter(count -> count.getValue().equalsIgnoreCase(city)).count();
+            System.out.println("Number of Persons In City " + city + ": " + totalPersonsInCity);
+        }
+        else if (option.equals("2")) {
+            System.out.println("Enter State Name: ");
+            String state = scanner.next();
+            long totalPersonsInState = stateAndPersonsMap.entrySet().stream().filter(count -> count.getValue().equalsIgnoreCase(state)).count();
+            System.out.println("Number of Persons In State " + state + ": " + totalPersonsInState);
         }
     }
 
@@ -313,8 +333,7 @@ public class AddressBookProgram {
      * @return
      */
     public static boolean checkContactIsExistsOrNot(Contact contactToBeCheck) {
-        boolean flag = contactsList.stream().anyMatch(contact -> contact.equals(contactToBeCheck));
-        return flag;
+        return contactsList.stream().anyMatch(contact -> contact.equals(contactToBeCheck));
     }
 
     /**
