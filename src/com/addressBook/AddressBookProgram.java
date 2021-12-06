@@ -1,6 +1,9 @@
 package com.addressBook;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class AddressBookProgram {
     static Scanner scanner = new Scanner(System.in);
@@ -152,7 +155,8 @@ public class AddressBookProgram {
             //This line is to display options.
             System.out.println(
                     "\nEnter a Option: \n1. Add Contact\n2. Display a Contact by name\n3. Edit Contact" +
-                            "\n4. Delete a Contact\n5. Display all Contact Names \n0. Exit " + addressBookName + " Address Book");
+                            "\n4. Delete a Contact\n5. Display all Contact Names" +
+                            "\n6. Sort and display contacts\n0. Exit " + addressBookName + " Address Book");
             String option = scanner.next();
 
             switch (option) {
@@ -170,6 +174,10 @@ public class AddressBookProgram {
                     break;
                 case "5":
                     displayAllContactPersonNames();
+                    break;
+                case "6":
+                    sortContactsByPersonsName();
+                    break;
                 case "0":
                     flag = false;
                     break;
@@ -184,9 +192,7 @@ public class AddressBookProgram {
     //This method is to print First name in every Contact object which are in array.
     public static void displayAllPersonsFirstName() {
         System.out.println("\nAll Contacts: ");
-        for (int i = 0; i < contactsList.size(); i++) {
-            System.out.println((i + 1) + ". " + contactsList.get(i).firstName);
-        }
+        IntStream.range(0, contactsList.size()).mapToObj(i -> (i + 1) + ". " + contactsList.get(i).firstName).forEachOrdered(System.out::println);
     }
 
     //This method displays the details of a person by taking input as first name.
@@ -345,15 +351,25 @@ public class AddressBookProgram {
         System.out.println("Enter City Name: ");
         String city = scanner.next();
 
-        for (Map.Entry<String, LinkedList> entry : addressBookMap.entrySet()) {
-            LinkedList<Contact> contactList = entry.getValue();
+        addressBookMap.forEach((key, value) -> {
+            LinkedList<Contact> contactList = value;
             for (Contact contact : contactList) {
                 if (contact.firstName.equalsIgnoreCase(firstName) && contact.city.equalsIgnoreCase(city)) {
-                    System.out.println("\nAddress Book Name: " + entry.getKey());
+                    System.out.println("\nAddress Book Name: " + key);
                     System.out.println("City Name: " + contact.city);
                     System.out.println("Person Name: " + contact.firstName);
                 }
             }
-        }
+        });
+    }
+
+    /**
+     * Method is used to sort contacts alphabetically in a Address Book by persons Name.
+     */
+    public static void sortContactsByPersonsName() {
+        List<Contact> contacts = contactsList.stream().sorted(Comparator.comparing(contact -> contact.firstName)).collect(Collectors.toList());
+        contactsList.clear();
+        contactsList.addAll(contacts);
+        displayAllPersonsFirstName();
     }
 }
