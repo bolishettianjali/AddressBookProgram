@@ -83,7 +83,7 @@ public class AddressBookProgram {
         } else {
             LinkedList<Contact> list = new LinkedList<>();//Value
             addressBookMap.put(addressBookNameToCreate, list);
-            System.out.println("\nAddress Book Creted Successfully");
+            System.out.println("\nAddress Book Created Successfully");
             displayAddressBookNames();
         }
     }
@@ -138,8 +138,7 @@ public class AddressBookProgram {
             String city = scanner.next();
             long totalPersonsInCity = cityAndPersonsMap.entrySet().stream().filter(count -> count.getValue().equalsIgnoreCase(city)).count();
             System.out.println("Number of Persons In City " + city + ": " + totalPersonsInCity);
-        }
-        else if (option.equals("2")) {
+        } else if (option.equals("2")) {
             System.out.println("Enter State Name: ");
             String state = scanner.next();
             long totalPersonsInState = stateAndPersonsMap.entrySet().stream().filter(count -> count.getValue().equalsIgnoreCase(state)).count();
@@ -156,7 +155,8 @@ public class AddressBookProgram {
             System.out.println(
                     "\nEnter a Option: \n1. Add Contact\n2. Display a Contact by name\n3. Edit Contact" +
                             "\n4. Delete a Contact\n5. Display all Contact Names" +
-                            "\n6. Sort and display contacts\n0. Exit " + addressBookName + " Address Book");
+                            "\n6. Sort and display contacts\n7. Sort and display contacts by city/state/zip" +
+                            "\n0. Exit " + addressBookName + " Address Book");
             String option = scanner.next();
 
             switch (option) {
@@ -177,6 +177,9 @@ public class AddressBookProgram {
                     break;
                 case "6":
                     sortContactsByPersonsName();
+                    break;
+                case "7":
+                    sortContactsByCityOrStateOrZip();
                     break;
                 case "0":
                     flag = false;
@@ -371,5 +374,33 @@ public class AddressBookProgram {
         contactsList.clear();
         contactsList.addAll(contacts);
         displayAllPersonsFirstName();
+    }
+
+    /**
+     * Method is used to sort and display contacts by city or state or zip.
+     */
+    public static void sortContactsByCityOrStateOrZip() {
+        List<Contact> contacts = null;
+        System.out.println("\nEnter a option to sort by\n1. City\n2. State\n3. zip");
+        String option = scanner.next();
+
+        if (option.equals("1")) {
+            contacts = contactsList.stream().sorted(Comparator.comparing(contact -> contact.city)).collect(Collectors.toList());
+            for (Contact contact : contacts) {
+                System.out.println("City: " + contact.city + ", Person name: " + contact.firstName);
+            }
+        } else if (option.equals("2")) {
+            contacts = contactsList.stream().sorted(Comparator.comparing(contact -> contact.state)).collect(Collectors.toList());
+            for (Contact contact : contacts) {
+                System.out.println("State: " + contact.state + ", Person name: " + contact.firstName);
+            }
+        } else if (option.equals("3")) {
+            contacts = contactsList.stream().sorted(Comparator.comparing(contact -> contact.zip)).collect(Collectors.toList());
+            for (Contact contact : contacts) {
+                System.out.println("Zip: " + contact.zip + ", Person name: " + contact.firstName);
+            }
+        } else {
+            System.out.println("Entered invalid option");
+        }
     }
 }
